@@ -36,8 +36,10 @@
     
     freqLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 80)];
     freqLabel.center = CGPointMake(self.view.bounds.size.width/2, self.view.bounds.size.height/2);
-    freqLabel.backgroundColor = [UIColor clearColor];
-    freqLabel.textAlignment = UITextAlignmentCenter;
+    freqLabel.backgroundColor = [UIColor blackColor];
+    freqLabel.textColor = [UIColor whiteColor];
+    freqLabel.textAlignment = NSTextAlignmentCenter;
+    freqLabel.text = @"0.0 Hz";
     
     [self.view addSubview:freqLabel];
     
@@ -64,37 +66,39 @@
     //###  received by the pitch follower by using a             ##
     //###  median filter. Provides sub cent precision!          ##
     //#############################################
+//    
+//    NSNumber *nsnum = [NSNumber numberWithDouble:value];
+//    [medianPitchFollow insertObject:nsnum atIndex:0];
+//    
+//    if(medianPitchFollow.count>22) {
+//        [medianPitchFollow removeObjectAtIndex:medianPitchFollow.count-1];
+//    }
+//    double median = 0;
+//    
+//    
+//    
+//    if(medianPitchFollow.count>=2) {
+//        NSSortDescriptor *highestToLowest = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:NO];
+//        NSMutableArray *tempSort = [NSMutableArray arrayWithArray:medianPitchFollow];
+//        [tempSort sortUsingDescriptors:[NSArray arrayWithObject:highestToLowest]];
+//        
+//        if(tempSort.count%2==0) {
+//            double first = 0, second = 0;
+//            first = [[tempSort objectAtIndex:tempSort.count/2-1] doubleValue];
+//            second = [[tempSort objectAtIndex:tempSort.count/2] doubleValue];
+//            median = (first+second)/2;
+//            value = median;
+//        } else {
+//            median = [[tempSort objectAtIndex:tempSort.count/2] doubleValue];
+//            value = median;
+//        }
+//        
+//        [tempSort removeAllObjects];
+//        tempSort = nil;
+//    }
     
-    NSNumber *nsnum = [NSNumber numberWithDouble:value];
-    [medianPitchFollow insertObject:nsnum atIndex:0];
-    
-    if(medianPitchFollow.count>22) {
-        [medianPitchFollow removeObjectAtIndex:medianPitchFollow.count-1];
-    }
-    double median = 0;
-    
-    
-    
-    if(medianPitchFollow.count>=2) {
-        NSSortDescriptor *highestToLowest = [NSSortDescriptor sortDescriptorWithKey:@"self" ascending:NO];
-        NSMutableArray *tempSort = [NSMutableArray arrayWithArray:medianPitchFollow];
-        [tempSort sortUsingDescriptors:[NSArray arrayWithObject:highestToLowest]];
-        
-        if(tempSort.count%2==0) {
-            double first = 0, second = 0;
-            first = [[tempSort objectAtIndex:tempSort.count/2-1] doubleValue];
-            second = [[tempSort objectAtIndex:tempSort.count/2] doubleValue];
-            median = (first+second)/2;
-            value = median;
-        } else {
-            median = [[tempSort objectAtIndex:tempSort.count/2] doubleValue];
-            value = median;
-        }
-        
-        [tempSort removeAllObjects];
-        tempSort = nil;
-    }
-    
+    NSString *res = [NSString stringWithFormat:@"%3.1f Hz", value];
+    NSLog(@"pitch: %@", res);
     freqLabel.text = [NSString stringWithFormat:@"%3.1f Hz", value];
     
 }

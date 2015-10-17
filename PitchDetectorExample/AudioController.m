@@ -35,7 +35,7 @@
 void checkStatus(OSStatus status);
 void checkStatus(OSStatus status) {
     if(status!=0)
-        printf("Error: %ld\n", status);
+        printf("Error: %d\n", (int)status);
 }
 
 #pragma mark init
@@ -43,13 +43,18 @@ void checkStatus(OSStatus status) {
 - (id)init
 {
     OSStatus status;
-    status = AudioSessionInitialize(NULL, NULL, NULL, (__bridge void*) self);
+//    status = AudioSessionInitialize(NULL, NULL, NULL, (__bridge void*) self);
+    NSError *error;
+    status = [[AVAudioSession sharedInstance] setActive:YES error:&error];
+//    printf("%s\n", error.description.cString);
+    NSLog(@"AVAudioSession setActive error => %@ ", error );
     checkStatus(status);
     
     // Describe audio component
     AudioComponentDescription desc;
     desc.componentType = kAudioUnitType_Output;
-    desc.componentSubType = kAudioUnitSubType_RemoteIO;
+//    desc.componentSubType = kAudioUnitSubType_RemoteIO;
+    desc.componentSubType = kAudioUnitSubType_VoiceProcessingIO;
     desc.componentFlags = 0;
     desc.componentFlagsMask = 0;
     desc.componentManufacturer = kAudioUnitManufacturer_Apple;
@@ -73,9 +78,9 @@ void checkStatus(OSStatus status) {
                                   sizeof(flag));
     checkStatus(status);
     
-    
     // Describe format
-    audioFormat.mSampleRate= 44100.0;
+//    audioFormat.mSampleRate= 44100.0;
+    audioFormat.mSampleRate= [[AVAudioSession sharedInstance] sampleRate];
     audioFormat.mFormatID= kAudioFormatLinearPCM;
     audioFormat.mFormatFlags= kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked;
     audioFormat.mFramesPerPacket= 1;
@@ -121,13 +126,18 @@ void checkStatus(OSStatus status) {
     
     
     // Initialise
-    UInt32 category = kAudioSessionCategory_PlayAndRecord;
-    status = AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(category), &category);
-    checkStatus(status);
+//      UInt32 category = kAudioSessionCategory_PlayAndRecord;
+//    status = AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(category), &category);
+//    checkStatus(status);
+    status = [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
+    NSLog(@"AVAudioSession setCategory error => %@ ", error );
+
     
     status = 0;
-    status = AudioSessionSetActive(YES);
-    checkStatus(status);
+//    status = AudioSessionSetActive(YES);
+//    checkStatus(status);
+    status =[[AVAudioSession sharedInstance] setActive:YES error:nil];
+
     
     status = AudioUnitInitialize(rioUnit);
     checkStatus(status);

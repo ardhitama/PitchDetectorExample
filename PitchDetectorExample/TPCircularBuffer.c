@@ -35,7 +35,7 @@ static inline bool _checkResult(kern_return_t result, const char *operation, con
     return true;
 }
 
-bool TPCircularBufferInit(TPCircularBuffer *buffer, int length) {
+bool TPCircularBufferInit(TPCircularBuffer *buffer, int32_t length) {
     
     buffer->length = round_page(length);    // We need whole page sizes
     buffer->count = 0;

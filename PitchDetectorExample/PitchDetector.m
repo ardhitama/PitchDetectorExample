@@ -64,9 +64,9 @@
             [self performSelectorInBackground:@selector(performWithNumFrames:) withObject:[NSNumber numberWithInt:newLength]];
             self.running = YES;
         }
-        samplesInSampleBuffer = 0;
-    } else {
-        //printf("NOT ENOUGH SAMPLES: %d\n", newLength);
+            samplesInSampleBuffer = 0;
+    } else{
+        printf("NOT ENOUGH SAMPLES: %d\nSampleRate: %f\nLowBoundFreq: %i\n", newLength, self.sampleRate, self.lowBoundFrequency);
     }
 }
 
@@ -126,7 +126,10 @@
     }
     
     freq =self.sampleRate/interp(result[returnIndex-1], result[returnIndex], result[returnIndex+1], returnIndex);
-    if(freq >= 27.5 && freq <= 4500.0) {
+    //freq *= 10;
+    printf("%f\n", freq);
+//    if(freq >= 27.5 && freq <= 4500.0) {
+    if(freq >= 20 && freq <= 20000) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [delegate updatedPitch:freq];
         }); 
@@ -140,7 +143,7 @@ float interp(float y1, float y2, float y3, int k) {
     
     float d, kp;
     d = (y3 - y1) / (2 * (2 * y2 - y1 - y3));
-    //printf("%f = %d + %f\n", k+d, k, d);
+//    printf("%f = %d + %f\n", k+d, k, d);
     kp  =  k + d;
     return kp;
 }

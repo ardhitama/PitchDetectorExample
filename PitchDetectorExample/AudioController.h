@@ -9,7 +9,8 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <AudioToolbox/AudioToolbox.h>
+//#import <AudioToolbox/AudioToolbox.h>
+#import <AVFoundation/AVFoundation.h>
 
 @protocol AudioControllerDelegate
 @required
